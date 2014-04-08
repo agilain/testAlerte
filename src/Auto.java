@@ -6,7 +6,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 
-public class MainPhoto {
+public class Auto {
 
 	/**
 	 * @param args
@@ -14,7 +14,6 @@ public class MainPhoto {
 	 */
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
-		
 		
 		BufferedImage newImage = ImageIO.read(new File("data/NDVI.png"));
 		Color c = new Color(newImage.getRGB(newImage.getHeight()/2, newImage.getWidth()/2));
@@ -24,8 +23,8 @@ public class MainPhoto {
 		System.out.println(c.getRGB());
 		System.out.println(c.getGreen());
 		Plante p = new Plante(null);
-		p.setPlante3("data/malade_sain.png", "data/malade_sain.png"); // en réalité, la première photo doit être celle de la plante à étudier en RGB, l'autre, celle en NDVI 
-		p.getSante();
+		p.setPlante3("data/reduite2.png", "data/reduite2.png"); // en réalité, la première photo doit être celle de la plante à étudier en RGB, l'autre, celle en NDVI 
+		p.getSante2();
 		p.imagedResult();
 		
 

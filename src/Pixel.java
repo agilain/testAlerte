@@ -2,10 +2,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import javax.media.jai.JAI;
 import javax.imageio.ImageIO;
+
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.lang.Math.*;
 
 
-public class Pixel implements Comparable{
+public class Pixel implements Comparable, Externalizable {
 
 	private double R;
 	private double B;
@@ -34,7 +39,7 @@ public class Pixel implements Comparable{
 	
 	
 	public double distance(Pixel pixel){
-		return Math.abs(this.NDVI-pixel.getNDVI()) + Math.abs(this.B-pixel.getB());
+		return Math.abs(this.NDVI-pixel.getNDVI()) + Math.abs(this.IR-pixel.getIR());
 	}
 	
 	public void setGroupe(int newnum){
@@ -117,6 +122,23 @@ public class Pixel implements Comparable{
 		if(p>0) this.setGroupe2(1);
 		if(p<0) this.setGroupe2(-1);
 		if(p==0) this.kppvPixel(k+1);
+	}
+	
+	public String toString(){
+		return "IR="+this.IR+"\n"+"NDVI="+this.NDVI+"\n";
+	}
+
+	@Override
+	public void readExternal(ObjectInput arg0) throws IOException,
+			ClassNotFoundException {
+		this.IR = arg0.readDouble();
+		this.NDVI = arg0.readDouble();
+	}
+
+	@Override
+	public void writeExternal(ObjectOutput arg0) throws IOException {
+		arg0.writeDouble(this.IR);
+		arg0.writeDouble(this.NDVI);
 	}
 
 }

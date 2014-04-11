@@ -16,17 +16,19 @@ public class MainPhoto {
 		// TODO Auto-generated method stub
 		
 		
-		BufferedImage newImage = ImageIO.read(new File("data/NDVI.png"));
-		Color c = new Color(newImage.getRGB(newImage.getHeight()/2, newImage.getWidth()/2));
-		System.out.println(newImage.getHeight());
-		System.out.println(newImage.getWidth());
+		//BufferedImage newImage = ImageIO.read(new File("data/malatest.png"));
+		//Color c = new Color(newImage.getRGB(newImage.getHeight()/2, newImage.getWidth()/2));
+		//System.out.println(newImage.getHeight());
+		//System.out.println(newImage.getWidth());
 
-		System.out.println(c.getRGB());
-		System.out.println(c.getGreen());
+		//System.out.println(c.getRGB());
+		//System.out.println(c.getGreen());
+		
 		Plante p = new Plante(null);
-		p.setPlante3("data/malade_sain.png", "data/malade_sain.png"); // en réalité, la première photo doit être celle de la plante à étudier en RGB, l'autre, celle en NDVI 
-		p.getSante();
-		p.imagedResult();
+		//p.setPlante3("data/big.png");  
+		//p.getSante();
+		//p.imagedResult2("data/big.png");
+		p.rectangle("data/big.png");
 		
 
 	}

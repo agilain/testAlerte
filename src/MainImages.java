@@ -37,12 +37,13 @@ public class MainImages {
 }
 		
 		Plante p = new Plante(null);
-		BufferedImage br = ImageIO.read(new File("im2sauv.png"));
-		ArrayList<Pixel> tab = p.photoToPlant(br);
-		p.setPlante(tab);
-		p.setEpsilon(0.1);
-		p.setK(2);
-		p.kmoyenne();
+		p.rectangle("data/big.png");
+		//BufferedImage br = ImageIO.read(new File("im2sauv.png"));
+		//ArrayList<Pixel> tab = p.photoToPlant(br);
+		//p.setPlante(tab);
+		//p.setEpsilon(0.1);
+		//p.setK(2);
+		//p.kmoyenne();
 	}
 }
 

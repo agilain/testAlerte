@@ -23,9 +23,9 @@ public class Auto {
 		System.out.println(c.getRGB());
 		System.out.println(c.getGreen());
 		Plante p = new Plante(null);
-		p.setPlante3("data/reduite2.png", "data/reduite2.png"); // en réalité, la première photo doit être celle de la plante à étudier en RGB, l'autre, celle en NDVI 
+		p.setPlante3("data/reduite2.png"); // en réalité, la première photo doit être celle de la plante à étudier en RGB, l'autre, celle en NDVI 
 		p.getSante2();
-		p.imagedResult();
+		p.imagedResult("data/reduite2.png");
 		
 
 	}

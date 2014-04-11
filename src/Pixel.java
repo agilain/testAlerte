@@ -16,8 +16,9 @@ public class Pixel implements Comparable, Externalizable {
 	private double B;
 	private double NDVI;
 	private double IR;
-	private int numgroupe = -1;
+	private int numgroupe;
 	private double eloignement;
+	private String cluster ;
 	
 	public double getEloignement(){
 		return this.eloignement;
@@ -30,6 +31,11 @@ public class Pixel implements Comparable, Externalizable {
 	private int numgroupe2;
 	private double distance = 0;
 	
+	public Pixel(){
+		
+	}
+	
+	
 	public Pixel(double R, double B, double NDVI, double IR){
 		this.R=R;
 		this.B=B;
@@ -37,9 +43,26 @@ public class Pixel implements Comparable, Externalizable {
 		this.IR=IR;
 	}
 	
+	public Pixel(double R, double B, double NDVI, double IR, int numGroupe){
+		this.R=R;
+		this.B=B;
+		this.NDVI=NDVI;
+		this.IR=IR;
+		this.numgroupe= numGroupe ;
+	}
+	
+	public Pixel(double R, double B, double NDVI, double IR, int numGroupe, String cluster){
+		this.R=R;
+		this.B=B;
+		this.NDVI=NDVI;
+		this.IR=IR;
+		this.numgroupe= numGroupe ;
+		this.cluster = cluster ;
+	}
+	
 	
 	public double distance(Pixel pixel){
-		return Math.abs(this.NDVI-pixel.getNDVI()) + Math.abs(this.IR-pixel.getIR());
+		return  Math.abs(this.IR-pixel.getIR()); //Math.abs(this.NDVI-pixel.getNDVI()) ;
 	}
 	
 	public void setGroupe(int newnum){
@@ -125,20 +148,26 @@ public class Pixel implements Comparable, Externalizable {
 	}
 	
 	public String toString(){
-		return "IR="+this.IR+"\n"+"NDVI="+this.NDVI+"\n";
+		return "IR="+this.IR+"\n"+"NDVI="+this.NDVI+"\n"+"R="+this.R+"\n"+"B="+this.B+"\n"+"Groupe="+this.numgroupe+"\n";
 	}
 
 	@Override
 	public void readExternal(ObjectInput arg0) throws IOException,
 			ClassNotFoundException {
-		this.IR = arg0.readDouble();
+		this.R = arg0.readDouble();
+		this.B = arg0.readDouble();
 		this.NDVI = arg0.readDouble();
+		this.IR = arg0.readDouble();
+		this.numgroupe = arg0.readInt();
 	}
 
 	@Override
 	public void writeExternal(ObjectOutput arg0) throws IOException {
-		arg0.writeDouble(this.IR);
+		arg0.writeDouble(this.R);
+		arg0.writeDouble(this.B);
 		arg0.writeDouble(this.NDVI);
+		arg0.writeDouble(this.IR);
+		arg0.writeInt(this.numgroupe);
 	}
 
 }

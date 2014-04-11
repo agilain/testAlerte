@@ -1,7 +1,17 @@
 import java.util.ArrayList;
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -21,8 +31,7 @@ class Plante {
 	private static BufferedImage temoinSain ;
 	private static BufferedImage temoinMalade  ;
 	private Plante plant3 ;
-	private int tailleG1 ; 
-	private int tailleG2 ;
+
 	
 	public Plante getPlant3(){
 		return this.plant3;
@@ -30,8 +39,8 @@ class Plante {
 	
 	
 	public static void setTemoin() throws IOException {
-		temoinSain = ImageIO.read(new File("data/saine.jpeg"));
-		temoinMalade = ImageIO.read(new File("data/malade.jpg"));
+		temoinSain = ImageIO.read(new File("data/tsain.png"));
+		temoinMalade = ImageIO.read(new File("data/tmalade.png"));
 	}
 	
 	public ArrayList<Pixel> photoToPlant2(BufferedImage photo){
@@ -40,8 +49,8 @@ class Plante {
 		for (int i = 0; i < 200; i++) {
 			for (int j = 0; j < 200; j++) {
 				Color c = new Color(photo.getRGB(i, j));
-				tableau2.add(m,new Pixel(c.getRed(), c.getBlue(), c.getGreen(),
-								c.getRGB()));
+				tableau2.add(m,new Pixel(c.getRed(), c.getBlue(), c.getBlue(),
+								Math.abs((c.getBlue()-c.getRed())/(c.getBlue()+c.getRed()))));
 				m++;
 			}
 		}
@@ -50,18 +59,121 @@ class Plante {
 	}
 	
 	public ArrayList<Pixel> photoToPlant(BufferedImage photo){
+		
 		ArrayList<Pixel> tableau2 = new ArrayList<Pixel>();
 		int m=0 ;
 		for (int i = 0; i < 200; i++) {
 			for (int j = 0; j < 200; j++) {
 				Color c = new Color(photo.getRGB(i, j));
-				tableau2.add(m,new Pixel(c.getRed(), c.getBlue(), c.getBlue(),
-								(c.getRed()-c.getBlue())/(c.getRed()+c.getBlue())));
+				tableau2.add(m,new Pixel(c.getRed(), c.getBlue(), c.getRGB(), c.getBlue()));
 				m++;
 			}
 		}
 
 		return tableau2;
+	}
+	
+	public void rectangle(String nomImage) throws IOException{
+		BufferedImage newImage = ImageIO.read(new File(nomImage));
+		int h1 = (newImage.getWidth()/20) ; // côté d'un carré
+		int h2 = (newImage.getWidth()/20) * 20  ;
+		int h3= h1/10 ;
+		
+		
+		
+		ArrayList<Rectangle> R = new ArrayList<Rectangle>() ;
+		ArrayList<ArrayList<Pixel>> A = new ArrayList<ArrayList<Pixel>>();
+		
+		int k=0 ;
+		for(int i=0 ; i< h2 ; i=i+h1){
+			for(int j=0 ; j< h2 ; j=j+h1){
+				R.add(k, new Rectangle(i,j,h1,h1));
+				k++ ;
+			}
+		}
+		
+		for(int u=0 ; u<R.size() ; u++){
+			A.add(new ArrayList<Pixel>());
+		}
+		
+	
+		for(int u=0 ; u< R.size(); u++){
+		for(int i=0 ; i<h2-1 ; i=i+h3 ){
+			for(int j=0 ; j<h2-1 ; j=j+h3){
+				 
+				if(R.get(u).contains(i,j)){
+					//System.out.println(i+"et"+j);
+					Color c = new Color(newImage.getRGB(i, j));
+					A.get(u).add(new Pixel(c.getRed(),c.getBlue(),  newImage.getRGB(i, j), c.getBlue() )) ;
+					
+				}
+			}
+			
+		}
+		}
+		
+		
+		
+		ObjectInputStream ois ; 
+		ObjectOutputStream oos ;
+		
+		for (int j = 0; j < R.size(); j++) {
+			System.out.println(A.get(j).size());
+		}
+		
+		try{
+			oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(new File("donnees2.txt"))));
+			for (int j = 0; j < R.size(); j++) {
+			oos.writeObject(new Moyenne(A.get(j)));
+		}
+			oos.close();
+		
+		}
+		
+		catch (FileNotFoundException e) {
+		      e.printStackTrace();
+		    } catch (IOException e) {
+		      e.printStackTrace();
+		    }     	
+		
+		try{
+			ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(new File("donnees2.txt")))) ;
+			  try {
+			        System.out.println("Affichage des moyennes :");
+			        System.out.println("*************************\n");
+			        for (int j = 0; j < R.size(); j++) {
+			        System.out.println(((Moyenne)ois.readObject()).toString());
+			        }
+			      } catch (ClassNotFoundException e) {
+			        e.printStackTrace();
+			      }
+				
+			      ois.close();
+		}
+		
+			
+		catch (FileNotFoundException e) {
+		      e.printStackTrace();
+		    } catch (IOException e) {
+		      e.printStackTrace();
+		    }     	
+		
+		//BufferedImage image= new BufferedImage((int)(newImage.getWidth()), (int)(newImage.getHeight()), BufferedImage.TYPE_INT_RGB);
+		try {
+			for(int i=0 ; i<newImage.getWidth();i++){
+				for(int j=0 ; j<newImage.getHeight();j++){
+				if(i%h1 == 0 | j%h1==0){
+					newImage.setRGB(i, j, 255);
+					
+				}
+				}
+			}
+		    File fic= new File("grille.png");
+		    ImageIO.write(newImage, "png", fic);}
+		catch (IOException e) {
+		    e.printStackTrace();
+		}
+		
 	}
 	
 	public void setPlante(ArrayList<Pixel> newplante) {
@@ -345,9 +457,47 @@ class Plante {
 		ObjectInputStream ois ; 
 		ObjectOutputStream oos ;
 		
-		for (int j = 0; j < plante.size(); j++) {
-			System.out.println(plante.get(j).getnumGroupe() +" "+ plante.get(j).getIR()+ " " + plante.get(j).getNDVI() );
+		try{
+			oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(new File("donnees2.txt"))));
+			for (int j = 0; j < plante.size(); j++) {
+			oos.writeObject(new Pixel(plante.get(j).getR(),plante.get(j).getB(),plante.get(j).getNDVI(), plante.get(j).getIR(), plante.get(j).getnumGroupe()));
 		}
+			oos.close();
+		
+		}
+		
+		catch (FileNotFoundException e) {
+		      e.printStackTrace();
+		    } catch (IOException e) {
+		      e.printStackTrace();
+		    }     	
+		
+		try{
+			ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(new File("donnees2.txt")))) ;
+			  try {
+			        System.out.println("Affichage des pixels :");
+			        System.out.println("*************************\n");
+			       for (int j = 0; j < plante.size(); j++) {
+			        System.out.println(((Pixel)ois.readObject()).toString());
+			       }
+			      } catch (ClassNotFoundException e) {
+			        e.printStackTrace();
+			      }
+				
+			      ois.close();
+		}
+		
+			
+		catch (FileNotFoundException e) {
+		      e.printStackTrace();
+		    } catch (IOException e) {
+		      e.printStackTrace();
+		    }     	
+		
+		//for (int j = 0; j < plante.size(); j++) {
+			//System.out.println(plante.get(j).getnumGroupe() +" "+ plante.get(j).getIR()+ " " + plante.get(j).getNDVI() );
+		//}
+		
 
 		System.out.println(R3.test(R1, epsilon));
 		
@@ -356,10 +506,10 @@ class Plante {
 		Moyenne repSain = new Moyenne(this.photoToPlant(temoinSain));
 		Moyenne repMalade = new Moyenne(this.photoToPlant(temoinMalade));
 		
-		//Pixel pixelSain = repSain.getCentroide();
-		Pixel pixelSain = new Pixel(0, 0, -1.2369085E7,68);
-		//Pixel pixelMalade = repMalade.getCentroide();
-		Pixel pixelMalade = new Pixel(0,0,64,-1.17E7);
+		Pixel pixelSain = repSain.getCentroide();
+		//Pixel pixelSain = new Pixel(0, 0, -1.2369085E7,68);
+		Pixel pixelMalade = repMalade.getCentroide();
+		//Pixel pixelMalade = new Pixel(0,0,64,-1.17E7);
 		double d1 = H2.get(indic).getCentroide().distance(pixelSain);
 		double d2 = H2.get(indic).getCentroide().distance(pixelMalade);
 
@@ -574,12 +724,14 @@ for (int u = 0; u < k; u++) {
 		
 		this.setTemoin();
 
-		Moyenne repSain = new Moyenne(this.photoToPlant(temoinSain));
+		//Moyenne repSain = new Moyenne(this.photoToPlant(temoinSain));
 		Moyenne repMalade = new Moyenne(this.photoToPlant(temoinMalade));
 		
 		//Pixel pixelSain = repSain.getCentroide();
 		Pixel pixelSain = new Pixel(0, 0,68, -1.2369085E7);
-		Pixel pixelMalade = repMalade.getCentroide();
+		Pixel pixelMalade = new Pixel(0,0,63, -1.1909057E7);
+		
+		//Pixel pixelMalade = repMalade.getCentroide();
 		
 		double d1 = H2.get(indic).getCentroide().distance(pixelSain);
 		double d2 = H2.get(indic).getCentroide().distance(pixelMalade);
@@ -595,36 +747,44 @@ for (int u = 0; u < k; u++) {
 	}
 	
 	
-	
-	public void setPlante3(String NomPhotoRVB, String NomPhotoNDVI)
+	public void setPlante3(String NomPhotoRVB)
 	throws IOException {
 		BufferedImage newImage = ImageIO.read(new File(NomPhotoRVB));
-		BufferedImage sortieNDVI = ImageIO.read(new File(NomPhotoNDVI));
-
+		
+		//int w = newImage.getWidth();
+		//int h = newImage.getHeight();
+		//BufferedImage after = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+		//AffineTransform at = new AffineTransform();
+		//at.scale(w/200, h/200);
+		//AffineTransformOp scaleOp = 
+		//new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
+		//after = scaleOp.filter(newImage, after);
+		
+		
 		int m = 0;
 		ArrayList<Pixel> tableau2 = new ArrayList<Pixel>();
-		for (int i = 0; i < 200; i++) {
-			for (int j = 0; j < 200; j++) {
+		for (int i = 0; i < newImage.getWidth(); i++) {
+			for (int j = 0; j < newImage.getHeight(); j++) {
 				Color c = new Color(newImage.getRGB(i, j));
-				tableau2.add(m, new Pixel(c.getRed(), c.getBlue(), c.getBlue(),
-						sortieNDVI.getRGB(i, j)));
+				tableau2.add(m, new Pixel(c.getRed(), c.getBlue(), newImage.getRGB(i, j), c.getBlue()));
+				//tableau2.add(m, new Pixel(c.getRed(), c.getGreen(),
+								//((c.getRed()-c.getBlue())/(c.getRed()+c.getBlue()))*127+1,c.getBlue()));
 				m++;
 			}
 		}
 		Plante plant2 = new Plante(tableau2);
 		this.plant3 = plant2;
-		plant3.setK(2);
+		plant3.setK(4);
 		plant3.setEpsilon(0.0001);
 		
 	}
 	
-	public void imagedResult() throws IOException{
-		
+	public void imagedResult(String photoRVB) throws IOException{
 			
 		BufferedImage image= new BufferedImage(200, 200, BufferedImage.TYPE_INT_RGB);
 
 		
-		for(int i=0;i<40000; i++){
+		for(int i=0;i<200*200; i++){
 			if(plant3.getPlante().get(i).getnumGroupe()==0){
 				image.setRGB(i/200, i%200, 255);
 			}
@@ -642,7 +802,53 @@ for (int u = 0; u < k; u++) {
 			}
 			
 			if(plant3.getPlante().get(i).getnumGroupe()==4){
-				image.setRGB(i/200, i%200, (203<<16 + (225)));
+				image.setRGB(i/200, i%200, (203<<16 + (225))); // violet
+			}
+			
+			if(plant3.getPlante().get(i).getnumGroupe()==5){
+				image.setRGB(i/200, i%200, (200 << 16) + (244 << 8) + 200);
+			}
+			
+		}
+		
+		try {
+			
+		    File fic= new File("resultat.png");
+		    ImageIO.write(image, "png", fic);}
+		catch (IOException e) {
+		    e.printStackTrace();
+		}
+	}
+	
+	public void imagedResult2(String photoRVB) throws IOException{
+		BufferedImage newImage = ImageIO.read(new File(photoRVB));
+			
+		BufferedImage image= new BufferedImage((int)(1.1*newImage.getWidth()), (int)(1.1*newImage.getHeight()), BufferedImage.TYPE_INT_RGB);
+
+		
+		for(int i=0;i<newImage.getWidth()*newImage.getHeight(); i++){
+			if(plant3.getPlante().get(i).getnumGroupe()==0){
+				image.setRGB(i/newImage.getWidth(), i%newImage.getHeight(), 255);
+			}
+			
+			if(plant3.getPlante().get(i).getnumGroupe()==1){
+				image.setRGB(i/newImage.getWidth(), i%newImage.getHeight(), (11 << 16) + (67 << 8) + 0);
+			}
+			
+			if(plant3.getPlante().get(i).getnumGroupe()==2){
+				image.setRGB(i/newImage.getWidth(), i%newImage.getHeight(), (200 << 16 + (0<<8) + 0));
+			} 
+			
+			if(plant3.getPlante().get(i).getnumGroupe()==3){
+				image.setRGB(i/newImage.getWidth(), i%newImage.getHeight(), (225<<16) + (195<<8)+ (5));
+			}
+			
+			if(plant3.getPlante().get(i).getnumGroupe()==4){
+				image.setRGB(i/newImage.getWidth(), i%newImage.getHeight(), (203<<16 + (225)));
+			}
+			
+			if(plant3.getPlante().get(i).getnumGroupe()==5){
+				image.setRGB(i/newImage.getWidth(), i%newImage.getHeight(), (200 << 16) + (244 << 8) + 200);
 			}
 			
 		}
@@ -659,9 +865,9 @@ for (int u = 0; u < k; u++) {
 	public Sante getSante() throws IOException
 		{
 		
-		plant3.setK(4);
+		plant3.setK(5);
 		plant3.setEpsilon(0.01);
-		Sante A = plant3.kmoyenne2(4);
+		Sante A = plant3.kmoyenne2(5);
 		if (A == Sante.MALADE) {
 			return Sante.MALADE;
 		} else {
@@ -693,6 +899,10 @@ for (int u = 0; u < k; u++) {
 		for (int i = 0; i < plante.size() - 1; i++) {
 			((Pixel) plante.get(i)).kppvPixel(k); // pk faire du cast ici ?
 		}
+	}
+	
+	public void utkppv(int k){
+		plant3.kppvPlante(k);
 	}
 }
 

@@ -25,10 +25,19 @@ public class MainPhoto {
 		//System.out.println(c.getGreen());
 		
 		Plante p = new Plante(null);
-		//p.setPlante3("data/big.png");  
+		p.setPlante3("ts.png");
+		p.utkppv(6);
 		//p.getSante();
-		//p.imagedResult2("data/big.png");
-		p.rectangle("data/big.png");
+		//p.imagedResult2("ts.png");
+		//p.rectangle("data/big.png");
+		
+	
+		//p.setPlante32("Test3/21.png", "Test3/23.png");
+		//p.getSante2();
+		//p.imagedResult22("Test3/21.png", "Test3/23.png");
+		
+		//Pixel p = new Pixel(100000,10000, 19999, 1000000000) ;
+		//p.kppvPixel(6);
 		
 
 	}

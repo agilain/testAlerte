@@ -1,0 +1,20 @@
+#!bin/bin/bash
+REUSSITE=0
+ECHEC=0
+
+for  MOT in 'java -jar $1 data/1.png'
+do
+    if ["$MOT = "rsain" ]
+then
+REUSSITE=$(($REUSSITE+1))
+
+else 
+ECHEC=$(($ECHEC+1))
+
+fi
+
+done 
+
+echo "REUSSITE= $REUSSITE"
+echo "REUSSITE= $ECHEC"
+

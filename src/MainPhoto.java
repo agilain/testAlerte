@@ -25,7 +25,10 @@ public class MainPhoto {
 		//System.out.println(c.getGreen());
 		
 		Plante p = new Plante(null);
-		p.setPlante3("ts.png");
+		//if(args.length>0)
+			//p.setPlante3(args[0]);
+		//else
+			p.setPlante3("pourcen/21.04m");
 		p.utkppv(6);
 		//p.getSante();
 		//p.imagedResult2("ts.png");

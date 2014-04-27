@@ -45,7 +45,7 @@ class Plante {
 	
 	
 	public static void setTemoin() throws IOException {
-		temoinSain = ImageIO.read(new File("data/init/tsain.png"));
+		temoinSain = ImageIO.read(new File("data/init/sain1.png"));
 		temoinSainBis = ImageIO.read(new File("data/init/sainbis.png"));
 		temoinMalade = ImageIO.read(new File("data/init/maladebis.png"));
 		temoinMaladeBis = ImageIO.read(new File("data/init/maladet2.png"));

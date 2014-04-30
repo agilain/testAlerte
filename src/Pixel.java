@@ -78,7 +78,7 @@ public void setbase2() throws IOException{
 		BufferedImage temoinSain = ImageIO.read(new File("data/init/sain1.png"));
 		BufferedImage temoinSainBis = ImageIO.read(new File("data/init/sainbis.png"));
 		BufferedImage temoinMalade = ImageIO.read(new File("data/init/maladebis.png"));
-		BufferedImage temoinMaladeBis = ImageIO.read(new File("data/init/maladet2.png"));
+		BufferedImage temoinMaladeBis = ImageIO.read(new File("data/init/fmalade1.png"));
 		BufferedImage mur1 = ImageIO.read(new File("data/init/mur1.png"));
 		BufferedImage mur2 = ImageIO.read(new File("data/init/mur2.png"));	
 		Pixel A1 = (new Moyenne(this.photoToPlant(temoinSain))).getCentroide();

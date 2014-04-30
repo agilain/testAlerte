@@ -19,7 +19,7 @@ public class MainPhoto {
 		if(args.length>0)
 			p.setPlante3(args[0]);
 		else
-			p.setPlante3("pourcen/test/03.04m.jpg");
+			p.setPlante3("pourcen/test/08.04s.png");
 		p.utkppv(6);
 		
 	}

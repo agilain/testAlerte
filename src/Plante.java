@@ -903,7 +903,7 @@ class Plante {
 			}
 
 		}
-
+		
 		int m1 = B.get(0);
 		int m2 = 0;
 		for (int u = 1; u < 6; u++) {
@@ -914,42 +914,47 @@ class Plante {
 		}
 		if (m2 == 0) {
 			System.out.println("rsain1");
-			// return "rsain1";
 		}
 
 		if (m2 == 1) {
 			System.out.println("rsain2");
-			// return "rsain2";
 		}
 
 		if (m2 == 2) {
 			System.out.println("rmalade1");
-			// return "rmalade1" ;
 		}
 
 		if (m2 == 3) {
 			System.out.println("rmalade2");
-			// return "rmalade2";
+			 
 		}
 
 		if (m2 == 4) {
 			System.out.println("rmur1");
-			// return "error";
+	
 		}
 
 		if (m2 == 5) {
 			System.out.println("rmur2");
-			// return "error";
 
-		}
+		} 
 		return m2;
+		
+		//if(B.get(0)+B.get(1)>B.get(2)+B.get(3)){
+			//System.out.println("rsain");
+			//return 1 ;
+			
+		//}
+		
+		//else {System.out.println("rmalade"); return 0;}
+		
 	}
 
 	public Sante utkppv(int k) throws IOException {
 		plant3.setK(6);
 		//plant3.setEpsilon(0.01);
 		int a = plant3.kppvPlante(k);
-		if (a == 0 | a == 1) {
+		if (a == 1) {
 			return Sante.SAIN;
 		}
 

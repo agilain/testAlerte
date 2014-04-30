@@ -22,10 +22,10 @@ public class Main2 {
 				//if(args.length>0)
 					//p.setPlante3(args[0]);
 				//else
-					p.setPlante3("pourcen/test/04.04m.png");
-					//p.utkppv(6);
-				p.getSante();
-				p.imagedResult2("pourcen/test/04.04m.png");
+					p.setPlante3("pourcen/test/28.03s.png");
+					p.utkppv(6);
+				//p.getSante();
+				//p.imagedResult2("pourcen/test/04.04m.png");
 				//p.rectangle("Initialisation/5/23.3.png");
 				
 			

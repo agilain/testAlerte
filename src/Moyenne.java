@@ -13,7 +13,15 @@ public class Moyenne implements Externalizable {
 	private double meansIR ;
 	private double vNDVI;
 	private double vIR ;
-		
+	
+	public double getvIR(){
+		return this.vIR ; 
+	}
+	
+	public double getMeansIR(){
+		return this.meansIR; 
+	}
+	
 	public Moyenne(ArrayList<Pixel> groupe){
 		this.groupe=groupe;
 		double R= groupe.get(0).getB();

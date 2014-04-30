@@ -43,14 +43,15 @@ public class Pixel implements Comparable, Externalizable {
 	
 public void photoToPlant2(BufferedImage photo, String type){
 		
-		int m=0 ;
-		for (int i = 0; i < 2; i++) {
-			for (int j = 0; j < 2; j++) {
+		
+	
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 10; j++) {
 				Color c = new Color(photo.getRGB(i, j));
 				
-				base.add(m,new Pixel(c.getRed(), c.getBlue(), c.getRGB(), c.getBlue()));
+				base.add(new Pixel(c.getRed(), c.getBlue(), c.getRGB(), c.getBlue()));
 				names.add(type);
-				m++;
+		
 			}
 		}
 
@@ -58,22 +59,23 @@ public void photoToPlant2(BufferedImage photo, String type){
 	}
 
 public void setbase2() throws IOException{
-	BufferedImage temoinSain = ImageIO.read(new File("data/init/tsain.png"));
+	BufferedImage temoinSain = ImageIO.read(new File("data/init/fsain1.png"));
 	BufferedImage temoinSainBis = ImageIO.read(new File("data/init/sainbis.png"));
 	BufferedImage temoinMalade = ImageIO.read(new File("data/init/maladebis.png"));
 	BufferedImage temoinMaladeBis = ImageIO.read(new File("data/init/maladet2.png"));
-	BufferedImage mur1 = ImageIO.read(new File("data/init/mur1.png"));
-	BufferedImage mur2 = ImageIO.read(new File("data/init/mur2.png"));	
+	BufferedImage mur1 = ImageIO.read(new File("data/init/fmur1.png"));
+	BufferedImage mur2 = ImageIO.read(new File("data/init/fmur2.png"));	
 	this.photoToPlant2(temoinSain, "sain1");
+	this.photoToPlant2(temoinSainBis, "sain2");
 	this.photoToPlant2(temoinMalade, "malade1");
 	this.photoToPlant2(temoinMaladeBis, "malade2");
-	this.photoToPlant2(temoinSainBis, "sain2");
 	this.photoToPlant2(mur1, "mur1");
 	this.photoToPlant2(mur2, "mur2");
+	
 	}
 	
 	public void setbase() throws IOException{
-		BufferedImage temoinSain = ImageIO.read(new File("data/init/tsain.png"));
+		BufferedImage temoinSain = ImageIO.read(new File("data/init/sain1.png"));
 		BufferedImage temoinSainBis = ImageIO.read(new File("data/init/sainbis.png"));
 		BufferedImage temoinMalade = ImageIO.read(new File("data/init/maladebis.png"));
 		BufferedImage temoinMaladeBis = ImageIO.read(new File("data/init/maladet2.png"));
@@ -197,50 +199,48 @@ public void setbase2() throws IOException{
 	
 	public int kppvPixel(int k) throws IOException{
 		
-		//CREATION DUN ARRAYLIST baseDApprentissage QUI SERVIRA D EXEMPLE
+		this.setbase2();
 		
-		//ArrayList<Pixel> baseDApprentissage = new ArrayList<Pixel>();
-			
-		//pour chaque pixel i appartenant � la base d'apprentissage (=bc de photos jor 100, 200)
-		//on calcule la distance au pixel fixe et on change l'attribut distance du pixel i
-		//base d'apprentissage = arraylist contenant tous les pixels de la base d'apprentissage
-	this.setbase2();	
-	double n=0 ;
-	for(int i=0;i<base.size();i++)
-		base.get(i).setDistance(this.distance(base.get(i)));
-		//on doit copier la base d'apprentissage d'abord (car on va trier le tableau)
-		//ArrayList<Pixel> baseDApprentissageTest = new ArrayList<Pixel>(base);
-		//on trie les pixels de la base d'apprentissage test avec Collections.sort
-			
-		//Collections.sort(baseDApprentissageTest);
+		double n=0 ;
+
+		for(int i=0;i<base.size();i++){
+			base.get(i).setDistance(this.distance(base.get(i))); 
+			// calcul de la distance entre le pixel qu'on veut classer et chaque pixel de la base
+		}
 		
-		double n1=base.get(0).getDistance();
-		ArrayList<Integer> indices = new ArrayList<Integer>(10) ;
-		for(int i=0 ; i<10 ; i++){
+			ArrayList<Integer> indices = new ArrayList<Integer>(10) ; 
+			// on va mettre dans ce tableau qu'ont dans "base" les 20 plus proches voisins du pixel
+			for(int i=0 ; i<10 ; i++){
 			indices.add(0);
 		}
 		
+		/***Pixel le plus proche***/
+		double n1=base.get(0).getDistance();
 		for(int i=0 ; i<base.size(); i++){
 			n= base.get(i).getDistance();
 			if(n<n1){
 				n1 = n ;
 				indices.set(0, i);
-			}
+				}
 		}
 		
-			for(int i=0 ; i<base.size(); i++){
+		
+		/****deuxième pixel le plus proche****/
+		n1=base.get(0).getDistance();
+		for(int i=0 ; i<base.size(); i++){
 				n= base.get(i).getDistance();
-				n1=base.get(0).getDistance();
+				
 				if(n<n1 & (indices.get(0)!=i)){
 					n1 = n ;
 					indices.set(1, i);
 				}
 			}
-			
 		
+		/***autres pixels les plus proches*****/
 		for(int u=2 ; u<10 ; u++){
-		for(int i=0 ; i<base.size(); i++){
-			n1=base.get(0).getDistance();
+		n1=base.get(0).getDistance();
+			for(int i=0 ; i<base.size(); i++){
+			
 			n= base.get(i).getDistance();
 			if(n<n1 & indices.contains(i)==false){
 				n1 = n ;
@@ -249,64 +249,55 @@ public void setbase2() throws IOException{
 		}
 		}
 		
-		for(int i =0 ; i<10 ; i++){
-			System.out.println(indices.get(i));
+		for(int i=0 ; i< indices.size(); i++){
+			System.out.println(names.get(indices.get(i)));
 		}
-
 		
-		ArrayList<String> A = new ArrayList<String>(10) ;
-		ArrayList<Integer> B = new ArrayList<Integer>(6) ;
+		
+		ArrayList<Integer> B = new ArrayList<Integer>(6) ; // pour chaque étiquette, B compte combien de fois elle apparaît dans les 20 plus proches
+		
 		for(int i=0 ; i<6 ; i++){
 			B.add(0);
 		}
 		
-		System.out.println("t"+indices.size());
+		int h=0 ;
 		
 		for(int i=0 ; i< indices.size(); i++){
-			A.add(names.get(indices.get(i)));
-			System.out.println(names.get(indices.get(i)));
 			if(names.get(indices.get(i))=="sain1"){
-				int h = B.get(0)+1;
-				//B.remove(0);
+				h = B.get(0)+1; 
 				B.set(0, h);	
 			}
 			
 			if(names.get(indices.get(i))=="sain2"){
-				int h = B.get(1)+1;
-				//B.remove(1);
-				B.set(1, h);	
+				B.set(1, B.get(1)+1);	
 			}
 			
 			if(names.get(indices.get(i))=="malade1"){
-				int h = B.get(2)+1;
-				//B.remove(2);
+				h = B.get(2)+1;
 				B.set(2, h);	
 			}
 			
 			if(names.get(indices.get(i))=="malade2"){
-				int h = B.get(3)+1;
-				//B.remove(3);
+				h = B.get(3)+1;
 				B.set(3, h);	
 			}
 			
 			if(names.get(indices.get(i))=="mur1"){
-				int h = B.get(4)+1;
-				//B.remove(4);
+				h = B.get(4)+1;
 				B.set(4, h);	
 			}
 			
 			if(names.get(indices.get(i))=="mur2"){
-				int h = B.get(5)+1;
-				//B.remove(5);
+				h = B.get(5)+1;
 				B.set(5, h);	
-			}
-				
+			}		
 		}
 		
 		for(int i=0 ; i<B.size(); i++){
 			System.out.println(B.get(i));
 		}
 		
+		/**Recherche du max de B**/
 		int v1=0 ;
 			int v2=0 ;
 			for(int u=0 ; u<B.size(); u++){

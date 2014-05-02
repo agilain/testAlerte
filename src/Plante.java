@@ -44,10 +44,10 @@ class Plante {
 	}
 
 	public static void setTemoin() throws IOException {
-		temoinSain = ImageIO.read(new File("data/init/sain1.png"));
-		temoinSainBis = ImageIO.read(new File("data/init/sainbis.png"));
-		temoinMalade = ImageIO.read(new File("data/init/maladebis.png"));
-		temoinMaladeBis = ImageIO.read(new File("data/init/maladet2.png"));
+		temoinSain = ImageIO.read(new File("data/init/Barrault/sain1.png"));
+		temoinSainBis = ImageIO.read(new File("data/init/Barrault/sain2.png"));
+		temoinMalade = ImageIO.read(new File("data/init/Barrault/malade1.png"));
+		temoinMaladeBis = ImageIO.read(new File("data/init/Barrault/malade2.png"));
 		mur1 = ImageIO.read(new File("data/init/mur1.png"));
 		mur2 = ImageIO.read(new File("data/init/mur2.png"));
 	}
@@ -549,28 +549,91 @@ class Plante {
 		this.setTemoin();
 
 		Moyenne repSain = new Moyenne(this.photoToPlant(temoinSain));
-		Moyenne repMalade = new Moyenne(this.photoToPlant(temoinMalade));
+		Moyenne repMalade = new Moyenne(this.photoToPlant(temoinMaladeBis));
 
 		Pixel pixelSain = repSain.getCentroide();
 		// Pixel pixelSain = new Pixel(0, 0, -1.2369085E7,68);
 		Pixel pixelMalade = repMalade.getCentroide();
 		// Pixel pixelMalade = new Pixel(0,0,64,-1.17E7);
-		double d1 = H2.get(indic).getCentroide().distance(pixelSain);
-		double d2 = H2.get(indic).getCentroide().distance(pixelMalade);
+		
+		//double d1 = H2.get(indic).getCentroide().distance(pixelSain);
+		//double d2 = H2.get(indic).getCentroide().distance(pixelMalade);
 
-		if (d1 <= d2) {
-			System.out.println("Votre plante est en bonne santé");
-			return Sante.SAIN;
-		} else {
-			System.out.println("Votre plante est malade");
-			return Sante.MALADE;
-		}
+		//if (d1 <= d2) {
+			//System.out.println("Votre plante est en bonne santé");
+			//return Sante.SAIN;
+		//} else {
+			//System.out.println("Votre plante est malade");
+			//return Sante.MALADE;
+		//}
 
-	}
+		
+		
+		
+		
+			ArrayList<Integer> A = new ArrayList<Integer>();
+			//Pour un pixel sur cent de la plante, on va entrer dans A le résultats (entier entre 0 et 5)
+			// donné par les kppvPixel
+			for (int i = 0; i < plante.size(); i++) {
+				A.add(this.plante.get(i).getnumGroupe()); 
+			}
+			
+			// On comptabilise les résultats dans B
+			ArrayList<Integer> B = new ArrayList<Integer>(6);
+			for (int i = 0; i < 6; i++) {
+				B.add(0);
+			}
+
+			for (int i = 0; i < A.size(); i++) {
+				if (A.get(i) == 0) {
+					int h = B.get(0) + 1;
+					B.set(0, h);
+				}
+
+				if (A.get(i) == 1) {
+					int h = B.get(1) + 1;
+					B.set(1, h);
+				}
+
+				if (A.get(i) == 2) {
+					int h = B.get(2) + 1;
+					B.set(2, h);
+				}
+
+				if (A.get(i) == 3) {
+					int h = B.get(3) + 1;
+					B.set(3, h);
+				}
+
+				if (A.get(i) == 4) {
+					int h = B.get(4) + 1;
+					B.set(4, h);
+				}
+
+				if (A.get(i) == 5) {
+					int h = B.get(5) + 1;
+					B.set(5, h);
+				}
+
+			}
+			
+			
+			
+			if(0.5*nbPixel<B.get(4)+B.get(5)){
+				System.out.println("rmalade");
+				return Sante.MALADE ;}
+			
+			else{System.out.println("rsain") ; return Sante.SAIN;}
+			
+			}
+
+	
 
 	public void setPlante3(String NomPhotoRVB) throws IOException {
 		BufferedImage newImage = ImageIO.read(new File(NomPhotoRVB));
-
+		setPlante3(newImage);
+	}
+	public void setPlante3(BufferedImage newImage){ 
 		// int w = newImage.getWidth();
 		// BufferedImage after = new BufferedImage(w, h,
 		// BufferedImage.TYPE_INT_ARGB);
@@ -654,11 +717,11 @@ class Plante {
 
 		for (int i = 0; i < 200 * 200; i++) {
 			if (plant3.getPlante().get(i).getnumGroupe() == 0) {
-				image.setRGB(i / 200, i % 200, 255);
+				image.setRGB(i / 200, i % 200, 255); // bleu
 			}
 
 			if (plant3.getPlante().get(i).getnumGroupe() == 1) {
-				image.setRGB(i / 200, i % 200, (11 << 16) + (67 << 8) + 0);
+				image.setRGB(i / 200, i % 200, (11 << 16) + (67 << 8) + 0); 
 			}
 
 			if (plant3.getPlante().get(i).getnumGroupe() == 2) {
@@ -904,49 +967,21 @@ class Plante {
 
 		}
 		
-		int m1 = B.get(0);
-		int m2 = 0;
-		for (int u = 1; u < 6; u++) {
-			if (B.get(u) > m1) {
-				m1 = B.get(u);
-				m2 = u;
-			}
-		}
-		if (m2 == 0) {
-			System.out.println("rsain1");
-		}
-
-		if (m2 == 1) {
-			System.out.println("rsain2");
-		}
-
-		if (m2 == 2) {
-			System.out.println("rmalade1");
-		}
-
-		if (m2 == 3) {
-			System.out.println("rmalade2");
-			 
-		}
-
-		if (m2 == 4) {
-			System.out.println("rmur1");
-	
-		}
-
-		if (m2 == 5) {
-			System.out.println("rmur2");
-
-		} 
-		return m2;
 		
-		//if(B.get(0)+B.get(1)>B.get(2)+B.get(3)){
-			//System.out.println("rsain");
-			//return 1 ;
-			
+		
+		if(B.get(0)+B.get(1)>B.get(2)+B.get(3)){
+			System.out.println("rsain");
+			return 1 ;}
+		
+		//if(B.get(1) + B.get(2)> A.size()/3){
+			//System.out.println("rmalade");
+			//return 0 ;
 		//}
 		
-		//else {System.out.println("rmalade"); return 0;}
+				
+		//else {System.out.println("rsain"); return 1;}
+		
+		else {System.out.println("rmalade"); return 0;}
 		
 	}
 
